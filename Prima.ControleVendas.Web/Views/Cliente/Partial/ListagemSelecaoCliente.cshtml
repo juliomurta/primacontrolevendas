@@ -1,0 +1,30 @@
+﻿@model  System.Collections.Generic.IEnumerable<Prima.ControleVendas.Web.Models.ViewModel.SelecaoClienteViewModel>
+
+<table class="table table-striped tabela-clientes-selecionaveis">
+    <thead>
+        <tr>
+            <th></th>
+            <th>CPF</th>
+            <th>Nome</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count() > 0)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><input type="radio" name="clientes" class="cliente-radio" value="@item.Cpf - @item.Nome" /> </td>
+                    <td>@item.Cpf</td>
+                    <td>@item.Nome</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3" style="text-align: center">Não existem clientes cadastrados</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Controle de Vendas</a>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 100px"></div>
+
+@if (TempData["sucesso"] != null)
+{
+    <div class="alert alert-success col-md-12" role="alert">
+        @TempData["sucesso"]
+    </div>
+}
+
+@if (TempData["erro"] != null)
+{
+    <div class="alert alert-danger col-md-12" role="alert">
+        @TempData["erro"]
+    </div>
+}
+
+<div class="card-body card-body-cascade text-center">
+    <h4 class="card-title"><strong>Prima Software</strong></h4>
+    <h5 class="blue-text"><strong>Controle de Vendas</strong></h5>
+
+    <p class="card-text">
+        Selecione uma das opções abaixo
+    </p>
+
+    <a class="btn btn-primary btn-lg" asp-controller="Cliente" asp-action="Create">Cadastrar Cliente</a>
+    <a class="btn btn-danger btn-lg" asp-controller="Produto" asp-action="Create">Cadastrar Produto</a>
+    <a class="btn btn-success btn-lg" asp-controller="Venda" asp-action="Create">Cadastrar Venda</a>
+
+</div>

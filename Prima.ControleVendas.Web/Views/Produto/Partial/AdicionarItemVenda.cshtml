@@ -1,0 +1,131 @@
+﻿
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <form class="form-add-item">
+            <div class="modal-header">
+                <h5 class="modal-title">Adicionar Item Venda</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-6 form-group ui-widget">
+                    <label>Produto</label>
+                    <select class="form-control produto-selecionado" name="produto"></select>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label>Quantidade</label>
+                    <input class="form-control quantidade-produto" name="quantidade" type="number" />
+                </div>
+                <div class="col-md-3 form-group">
+                    <label>Preço Unitário</label>
+                    <input class="form-control preco-unit-produto" name="preco_unitario" type="number" />
+                </div>
+                <div style="clear: both"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary btn-adicionar-produto">Adicionar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(".btn-adicionar-produto").click(function () {
+        $(".form-add-item").validate({
+            rules: {
+                produto: {
+                    required:true,
+                },
+                quantidade: {
+                    required: true,
+                    min: 1
+                },
+                preco_unitario: {
+                    required: true,
+                    min: 0.01
+                }
+            },
+            messages: {
+                produto: {
+                    required: "O campo produto é obrigatório."
+                },
+                quantidade: {
+                    required: "O campo quantidade é obrigatório.",
+                    min: "Adicione pelo menos um item"
+                },
+                preco_unitario: {
+                    required: "O campo preço unitário é obrigatório",
+                    min: "O preço mínimo é R$ 0,01"
+                }
+            },
+            submitHandler: function () {        
+                var produto = $(".produto-selecionado").val();
+                var quantidade = parseInt($(".quantidade-produto").val());
+                var precoUnitario = parseFloat($(".preco-unit-produto").val());
+
+                var itensCarregados = PegarItensDaTabela();
+                
+                var repetido = itensCarregados.some(function (x) {
+                    return x.DescricaoProduto == produto;
+                });
+
+                if (repetido) {
+                    alert("Não são permitidos produtos repetidos");
+                    return;
+                }
+
+                var novoItem = GetProduto(produto, quantidade, precoUnitario, 0);                
+                itensCarregados.push(novoItem);
+
+                $.ajax({
+                    method: "POST",
+                    url: "@Url.Action("AdicionarItemTabela", "Venda")",
+                    data: {
+                        itens: itensCarregados
+                    },
+                    success: function (data) {
+                        debugger;
+                        $(".tabela-itens-selecionados").html(data);
+                        $(".modal-produto").modal("hide");
+                    },
+                    error: function () {
+                        alert("Erro ao adicionar item na venda.");
+                    }
+                });
+            }
+        });
+
+        $(".form-add-item").submit();
+    });
+
+    function GetProduto(produto, quantidade, precoUnitario, precoTotal) {
+        return {
+            ProdutoId: 0,
+            DescricaoProduto: produto,
+            Quantidade: quantidade,
+            PrecoUnitario: precoUnitario,
+            PrecoTotal: precoTotal
+        };
+    }
+
+    function PegarItensDaTabela() {
+        var produtos = [];
+
+        if ($(".tabela-itens-selecionados table").hasClass("isempty")) {
+            return [];
+        }
+
+        $(".tabela-itens-selecionados table tbody tr").each(function (index, element) {
+            debugger;
+            var produto = $(element).find("td:eq(0)").html();
+            var quantidade = parseInt($(element).find("td:eq(1)").html());
+            var precoUnitario = parseFloat($(element).find("td:eq(2)").html().replace("R$", ""));
+            var precoTotal = parseFloat($(element).find("td:eq(3)").html().replace("R$", ""));
+            produtos.push(GetProduto(produto, quantidade, precoUnitario, precoTotal));
+        });
+
+        return produtos;
+    }
+</script>

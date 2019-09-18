@@ -1,0 +1,23 @@
+﻿@model Prima.ControleVendas.Web.Models.ViewModel.ProdutoViewModel
+
+@{
+    ViewData["Title"] = "Cadastrar Produto";
+    Layout = "_Layout";
+}
+
+
+<div class="panel panel-success" style="width:50%; margin: 1% auto;">
+    <div class="panel-heading text-center">Cadastrar Produto</div>
+    <div class="panel-body">
+        <form class="p-a-1" asp-action="Create" method="post">
+            <div asp-validation-summary="All" class="required"></div>
+            <div class="form-group">
+                <label asp-for="Nome">Nome:</label>
+                <input class="form-control" asp-for="Nome" />
+            </div>
+            <button class="btn btn-primary" type="submit">
+                Enviar
+            </button>
+        </form>
+    </div>
+</div>

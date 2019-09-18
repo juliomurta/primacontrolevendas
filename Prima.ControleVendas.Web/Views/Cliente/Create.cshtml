@@ -1,0 +1,38 @@
+﻿@model Prima.ControleVendas.Web.Models.ViewModel.ClienteViewModel
+
+@{
+    ViewData["Title"] = "Cadastrar Cliente";
+    Layout = "_Layout";
+}
+
+<div class="panel panel-success"  style="width:50%; margin: 1% auto;">
+    <div class="panel-heading text-center">Cadastrar Cliente</div>
+    <div class="panel-body">
+        <form class="p-a-1" asp-action="Create" method="post">
+            <div asp-validation-summary="All" class="required"></div>
+            <div class="form-group">
+                <label asp-for="Cpf">CPF:</label>
+                <input class="form-control cpf-format" asp-for="Cpf" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Nome">Nome:</label>
+                <input class="form-control" asp-for="Nome" />
+            </div>
+            <div class="form-group">
+                <label asp-for="DataNascimento">Data Nascimento:</label>
+                <input class="form-control date-format" asp-for="DataNascimento" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Email">E-Mail:</label>
+                <input class="form-control" asp-for="Email" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Telefone">Telefone:</label>
+                <input class="form-control phone-format" asp-for="Telefone" />
+            </div>
+            <button class="btn btn-primary" type="submit">
+                Enviar
+            </button>
+        </form>
+    </div>
+</div>

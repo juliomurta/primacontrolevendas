@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <script asp-src-include="lib/jquery/dist/jquery.js"></script>
+    <script asp-src-include="lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script asp-src-include="lib/jquery-mask/dist/jquery.mask.js"></script>
+    <script asp-src-include="lib/bootstrap/dist/js/bootstrap.js"></script>
+    <title>@ViewBag.Title</title>
+    <style>
+        .required {
+            color: red;
+        }
+
+        .modal-body {
+            max-height: calc(100vh - 212px);
+            overflow-y: auto;
+        }
+
+        label.error {
+            font-size: 10px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+    <script>
+        $(document).ready(function () {
+            $(".date-format").mask("99/99/9999");
+            $(".cpf-format").mask("999.999.999-99");
+            $(".phone-format").mask("(99)9999-9999");
+        });
+    </script>
+
+</body>
+</html>

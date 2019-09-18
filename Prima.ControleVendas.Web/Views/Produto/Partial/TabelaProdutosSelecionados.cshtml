@@ -1,0 +1,85 @@
+﻿@model Prima.ControleVendas.Web.Models.ViewModel.AgrupamentoItemViewModel
+
+@{
+    Layout = null;
+}
+
+<header>
+    <h4>Itens</h4>
+</header>
+
+<div style="text-align:right">
+    <a class="abrir-modal-produto">Adicionar Produto</a>
+</div>
+
+@if (Model.Itens != null && Model.Itens.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Preço Unitário</th>
+                <th>Preço Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Itens)
+            {
+                <tr>
+                    <td>@item.DescricaoProduto</td>
+                    <td>@item.Quantidade.ToString("N0")</td>
+                    <td>@item.PrecoUnitario.ToString("C2")</td>
+                    <td>@item.PrecoTotal.ToString("C2")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <table class="table table-striped isempty">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Preço Unitário</th>
+                <th>Preço Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: center" colspan="4">Nenhum produto foi adicionado.</td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+
+<header style="text-align:right">
+    <h4>Total da Venda: @Model.Total.ToString("C2")</h4>
+</header>
+
+<script>
+    $(".abrir-modal-produto").click(function () {
+
+        $(".modal-produto").load("@Url.Action("AbrirModalAdicionarProduto", "Produto")", function () {
+            $(this).modal();
+            $.ajax({
+                method: "POST",
+                url: "@Url.Action("List", "Produto")",
+                success: function (data) {
+                    $(".produto-selecionado").append($("<option />").val("").text("Selecione um produto"));
+
+                    for (var i = 0; i < data.length; i++) {
+                        var labelProduto = data[i].id + ' - ' + data[i].nome;
+                        $(".produto-selecionado").append($("<option />").val(labelProduto).text(labelProduto));
+                    }
+                },
+                error: function () {
+                    alert('Ocorreu um erro ao carregar o campo de autocompletar.')
+                }
+            });
+        });
+    });
+</script>

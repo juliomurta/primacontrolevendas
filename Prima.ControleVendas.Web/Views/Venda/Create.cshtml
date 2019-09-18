@@ -1,0 +1,82 @@
+﻿@model Prima.ControleVendas.Web.Models.ViewModel.VendaViewModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="panel panel-success" style="width:50%; margin: 1% auto;">
+    <div class="panel-heading text-center">Cadastrar Venda</div>
+    <div class="panel-body">
+        <div asp-validation-summary="All" class="required"></div>
+        <div class="form-group">
+            <header>
+                <h4>Cliente</h4>
+            </header>
+            <div class="form-inline">
+                <button class="btn btn-primary abrir-modal-cliente">
+                    <i class="glyphicon glyphicon-search" aria-hidden="true"></i>
+                </button>
+                <input asp-for="InfoClienteSelecionado" class="form-control info-cliente-selecionado" style="width: 90%" disabled />
+            </div>
+        </div>
+
+        <div class="tabela-itens-selecionados">
+            @Html.Partial("~/Views/Produto/Partial/TabelaProdutosSelecionados.cshtml", Model.AgrupamentoItens)
+        </div>
+
+        <div style="text-align: center">
+            <button class="btn btn-primary salvar-venda">
+                Enviar
+            </button>
+        </div>
+
+        <div class="modal modal-cliente fade"></div>
+        <div class="modal modal-produto fade"></div>
+    </div>
+    <script>
+        $(".abrir-modal-cliente").click(function () {
+            $(".modal-cliente").load("@Url.Action("AbrirModalProcurarCliente", "Cliente")", function () {
+                $(this).modal();
+            });
+        });
+
+        $(".salvar-venda").click(function () {
+            var cliente = $(".info-cliente-selecionado").val();
+
+            if (cliente == '') {
+                alert('É obrigatório selecionar um cliente.');
+                return;
+            }
+
+            if ($(".tabela-itens-selecionados table").hasClass("isempty")) {
+                alert('Selecione pelo menos um produto.');
+                return;
+            }
+
+            debugger;
+            var produtos = PegarItensDaTabela();
+            var vendaViewModel = {
+                InfoClienteSelecionado : cliente,
+                AgrupamentoItens : {
+                    Itens : produtos,
+                    Total : 0
+                }
+            }
+
+            $.ajax({
+                method: "POST",
+                url: "@Url.Action("Create", "Venda")",
+                data: {
+                    vendaViewModel : vendaViewModel
+                },
+                success: function (response) {
+                    location.href = response;
+                },
+                error: function (response) {
+                    location.href = response;
+                }
+            });
+        });
+
+    </script>
+</div>
